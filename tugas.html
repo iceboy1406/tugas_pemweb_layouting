@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Findez Digital Attendance</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+                box-sizing: border-box;
+                font-family: "Poppins", "sans-serif";
+            }
+
+            body {
+                background-color: #080b0f;
+                color: white;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            header {
+                display: flex;
+                gap: 32px;
+            }
+            header .sidebar-part {
+                width: 300px;
+                font-weight: 600;
+                font-size: 24px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .toggle-sidebar-button {
+                background: none;
+                border: none;
+                display: block;
+                cursor: pointer;
+            }
+
+            header .content-part {
+                flex-grow: 1;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .search-input {
+                background-color: #212327;
+                padding: 8px;
+                padding-left: 16px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .search-input input {
+                background-color: transparent;
+                border: none;
+                color: white;
+                font-size: 14px;
+            }
+            .search-input input::placeholder {
+                color: #909193;
+            }
+
+            .search-input input:focus {
+                outline: none;
+            }
+
+            .search-input .search-keybinds {
+                background-color: #37393c;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border-radius: 6px;
+                padding: 4px 8px;
+                font-size: 14px;
+            }
+            .profile {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                cursor: pointer;
+            }
+
+            .profile .photo-profile {
+                display: block;
+                border-radius: 50%;
+            }
+
+            .profile .info {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .profile .info .name {
+                font-size: 18px;
+                color: white;
+                font-weight: 600;
+            }
+
+            .profile .info .email {
+                font-size: 16px;
+                color: #babbbc;
+            }
+
+            main {
+                display: flex;
+                gap: 32px;
+            }
+
+            main #sidebar {
+                width: 300px;
+            }
+
+            p.menu-title {
+                color: #b3b5b8;
+                font-weight: 600;
+                padding: 16px;
+            }
+
+            #sidebar nav {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            #sidebar nav section {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            #sidebar nav .nav-link {
+                padding: 16px;
+                display: flex;
+                align-items: center;
+                gap: 24px;
+                text-decoration: none;
+                color: #babbbc;
+                font-weight: 500;
+                font-size: 16px;
+                border-radius: 8px;
+            }
+
+            #sidebar nav .nav-link:hover {
+                background-color: #212327;
+            }
+
+            #sidebar nav .nav-link.active {
+                color: #4effca;
+                background-color: #212327;
+                font-weight: 600;
+            }
+
+            #sidebar nav .nav-link img {
+                width: 24px;
+                height: 24px;
+            }
+
+            .nav-link .left-side {
+                flex-grow: 1;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .nav-link .counter-label {
+                color: #ffffff;
+                width: 24px;
+                height: 24px;
+                background: #212327;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 12px;
+                border-radius: 8px;
+            }
+
+            .nav-link:hover .counter-label {
+                filter: brightness(1.75);
+            }
+            #content {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+            #content section {
+                width: 100%;
+                background-color: #212327;
+                padding: 28px;
+                border-radius: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+            }
+
+            #content .section-header {
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #content .section-header .actions {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            h2.section-title {
+                font-size: 24px;
+                line-height: 32px;
+                height: 32px;
+                font-weight: 600;
+                color: white;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+
+            h2.section-title .decoration {
+                height: 100%;
+                width: 6px;
+                display: block;
+                border-radius: 3px;
+                background-color: #4effca;
+            }
+
+            button.outline-button,
+            button.solid-button {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 16px;
+                font-weight: 500;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                line-height: 18px;
+            }
+
+            button.solid-button {
+                color: #080b0f;
+                background-color: #4effca;
+                border: none;
+            }
+
+            button.outline-button {
+                color: #fff;
+                background-color: transparent;
+                border: none;
+                outline: 2px solid #434549;
+            }
+
+            button.icon-button {
+                color: #fff;
+                background-color: transparent;
+                border: none;
+                outline: 2px solid #434549;
+                padding: 10px;
+                font-weight: 500;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            button.icon-button img {
+                display: block;
+            }
+
+            button.icon-button.active {
+                outline-color: #9b9c9d;
+                background-color: #37393c;
+            }
+
+            #employee-details .employee-info {
+                display: flex;
+                align-items: center;
+                gap: 24px;
+            }
+
+            .employee-info img {
+                border-radius: 50%;
+            }
+
+            .employee-bio {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .employee-bio h3.employee-name {
+                font-size: 24px;
+                color: white;
+                font-weight: 600;
+            }
+
+            .employee-bio-list {
+                display: flex;
+                align-items: center;
+                gap: 40px;
+            }
+
+            .employee-bio-list-item {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .employee-bio-list-item .label {
+                color: #c1c1c2;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            .employee-bio-list-item .content {
+                color: #ffffff;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 1.5;
+            }
+
+            ul.employee-stats {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 24px;
+            }
+
+            .employee-stats .employee-stat-item {
+                list-style: none;
+                background-color: #37393d;
+                padding: 16px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .employee-stat-item img {
+                width: 22px;
+                height: 22px;
+                display: block;
+                padding: 12px;
+                box-sizing: content-box;
+                background-color: #4b4d50;
+                border-radius: 50%;
+                overflow: visible;
+            }
+
+            .employee-stat-item .stat-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .employee-stat-item .content {
+                color: #fff;
+                font-size: 20px;
+                font-weight: 500;
+            }
+            .employee-stat-item .label {
+                color: #c7c8c9;
+                font-size: 16px;
+            }
+
+            .total-attendance-image {
+                transform: rotate(-90deg);
+            }
+
+            .attendance-history-list {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 24px;
+            }
+
+            .attendance-history-list-item {
+                padding: 16px;
+                background-color: #37393c;
+                border-radius: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                list-style: none;
+            }
+
+            .attendance-history-list-item .header-part {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .attendance-history-list-item .header-part .attendance-date {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+            }
+
+            .attendance-history-list-item .header-part .attendance-date img {
+                width: 22px;
+                height: 22px;
+            }
+
+            .attendance-history-list-item .header-part .attendance-date p {
+                color: #ffffff;
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            .attendance-history-list-item .header-part .attendance-status {
+                padding: 8px 16px;
+                font-size: 14px;
+                font-weight: 500;
+                border-radius: 20px;
+            }
+
+            .attendance-history-list-item
+                .header-part
+                .attendance-status.on-time {
+                background-color: #394c4b;
+                color: #4effca;
+            }
+            .attendance-history-list-item .header-part .attendance-status.late {
+                background-color: #4b4a43;
+                color: #ffe978;
+            }
+            .attendance-history-list-item
+                .header-part
+                .attendance-status.absent {
+                background-color: #46484b;
+                color: #bdbdbf;
+            }
+
+            .attendance-history-list-item .content-part {
+                display: flex;
+                gap: 48px;
+            }
+            .attendance-history-list-item .content-part .check-in-group,
+            .attendance-history-list-item .content-part .check-out-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .attendance-history-list-item .content-part .label {
+                font-size: 14px;
+                color: #b7b8ba;
+                font-weight: 400;
+            }
+            .attendance-history-list-item .content-part .content {
+                font-size: 18px;
+                color: #ffffff;
+                font-weight: 500;
+            }
+
+            nav.pagination {
+                width: 100%;
+                display: flex;
+                gap: 8px;
+                justify-content: center;
+            }
+
+            nav.pagination .pagination-link {
+                text-decoration: none;
+                color: #afb0b1;
+                width: 28px;
+                height: 28px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                outline: 2px solid #3c3d41;
+                border-radius: 8px;
+            }
+
+            nav.pagination .pagination-link.active {
+                outline-color: #999a9c;
+                color: #ffffff;
+                background-color: #37393d;
+            }
+
+            footer {
+                margin-left: 332px;
+                background-color: #212327;
+                padding: 24px;
+                border-radius: 8px;
+                display: flex;
+                justify-content: center;
+                color: #fff;
+            }
+
+            footer a {
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <aside class="sidebar-part">
+                <div class="logo">Findez</div>
+                <button class="toggle-sidebar-button">
+                    <img
+                        src="/assets/icons/sidebar_left.svg"
+                        alt="Toggle Sidebar"
+                        width="24px"
+                        height="24px"
+                    />
+                </button>
+            </aside>
+            <aside class="content-part">
+                <label class="search-input">
+                    <img
+                        src="/assets/icons/search.svg"
+                        alt="Search Icon"
+                        width="18px"
+                        height="18px"
+                    />
+                    <input type="text" placeholder="Search here..." />
+                    <div class="search-keybinds">
+                        <img
+                            src="assets/icons/command.svg"
+                            alt="Command"
+                            width="16px"
+                            height="16px"
+                        />
+                        F
+                    </div>
+                </label>
+                <div class="profile">
+                    <img
+                        src="/assets/images/photo_profile.png"
+                        alt="Photo Profile"
+                        width="48px"
+                        height="48px"
+                        class="photo-profile"
+                    />
+                    <div class="info">
+                        <p class="name">Freddy Freeman</p>
+                        <p class="email">freddy@findez.com</p>
+                    </div>
+                    <img
+                        src="/assets/icons/arrow_down.svg"
+                        alt="Arrow Down"
+                        width="28px"
+                        height="28px"
+                    />
+                </div>
+            </aside>
+        </header>
+        <main>
+            <aside id="sidebar">
+                <nav>
+                    <section id="main-menu">
+                        <p class="menu-title">MAIN MENU</p>
+                        <a href="#" class="nav-link">
+                            <img src="/assets/icons/home.svg" alt="Home Icon" />
+                            Dashboard
+                        </a>
+                        <a href="#" class="nav-link">
+                            <img
+                                src="/assets/icons/chart.svg"
+                                alt="Analytics Icon"
+                            />
+                            Analytics
+                            <div class="left-side">
+                                <img
+                                    src="/assets/icons/arrow_down_gray.svg"
+                                    alt="Arrow Down"
+                                    width="24px"
+                                    height="24px"
+                                />
+                            </div>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <img
+                                src="/assets/icons/calendar.svg"
+                                alt="Calndar Icon"
+                            />
+                            Schedule
+                        </a>
+                        <a href="#" class="nav-link active">
+                            <img
+                                src="/assets/icons/people.svg"
+                                alt="People Icon"
+                            />
+                            Members
+                        </a>
+                        <a href="#" class="nav-link">
+                            <img src="/assets/icons/bell.svg" alt="Bell Icon" />
+                            Notifications
+
+                            <div class="left-side">
+                                <div class="counter-label">8</div>
+                            </div>
+                        </a>
+                    </section>
+                    <section id="main-menu">
+                        <p class="menu-title">SETTINGS</p>
+                        <a href="#" class="nav-link">
+                            <img
+                                src="/assets/icons/settings.svg"
+                                alt="Settings Icon"
+                            />
+                            Settings
+                            <div class="left-side">
+                                <img
+                                    src="/assets/icons/arrow_down_gray.svg"
+                                    alt="Arrow Down"
+                                    width="24px"
+                                    height="24px"
+                                />
+                            </div>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <img
+                                src="/assets/icons/help_center.svg"
+                                alt="Help Center Icon"
+                            />
+                            Help Center
+                        </a>
+                    </section>
+                </nav>
+            </aside>
+            <aside id="content">
+                <section id="employee-details">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="decoration"></span>Employee Details
+                        </h2>
+                        <div class="actions">
+                            <button class="outline-button">
+                                This Year
+                                <img
+                                    src="/assets/icons/arrow_down.svg"
+                                    alt="Arrow Down Icon"
+                                    width="20px"
+                                    height="20px"
+                                />
+                            </button>
+                            <button class="solid-button">
+                                <img
+                                    src="/assets/icons/download.svg"
+                                    alt="Arrow Down Icon"
+                                    width="20px"
+                                    height="20px"
+                                />
+                                Download Info
+                            </button>
+                        </div>
+                    </div>
+                    <div class="employee-info">
+                        <img
+                            src="/assets/images/employee.png"
+                            alt="Natashia Khaleria Photo"
+                            width="128px"
+                            height="128px"
+                        />
+                        <div class="employee-bio">
+                            <h3 class="employee-name">Natashia Khaleria</h3>
+                            <div class="employee-bio-list">
+                                <div class="employee-bio-list-item">
+                                    <p class="label">Role</p>
+                                    <p class="content">Head of UX Design</p>
+                                </div>
+                                <div class="employee-bio-list-item">
+                                    <p class="label">Phone Number</p>
+                                    <p class="content">(+62) 812 3456-7890</p>
+                                </div>
+                                <div class="employee-bio-list-item">
+                                    <p class="label">Email Address</p>
+                                    <p class="content">
+                                        nathashiakhaleria@gmail.com
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="employee-stats">
+                        <li class="employee-stat-item">
+                            <img
+                                src="/assets/icons/total_attendance.svg"
+                                alt="Total Attendance Icons"
+                                class="total-attendance-image"
+                            />
+                            <div class="stat-group">
+                                <p class="content">309</p>
+                                <p class="label">Total Attendance</p>
+                            </div>
+                        </li>
+                        <li class="employee-stat-item">
+                            <img
+                                src="/assets/icons/check_in.svg"
+                                alt="Check In Icons"
+                            />
+                            <div class="stat-group">
+                                <p class="content">08:46</p>
+                                <p class="label">Avg Check In Time</p>
+                            </div>
+                        </li>
+                        <li class="employee-stat-item">
+                            <img
+                                src="/assets/icons/check_out.svg"
+                                alt="Check Out Icons"
+                            />
+                            <div class="stat-group">
+                                <p class="content">17:04</p>
+                                <p class="label">Avg Check Out Time</p>
+                            </div>
+                        </li>
+                        <li class="employee-stat-item">
+                            <img
+                                src="/assets/icons/medal.svg"
+                                alt="Medal Icons"
+                            />
+                            <div class="stat-group">
+                                <p class="content">Role Model</p>
+                                <p class="label">Employee Predicate</p>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+                <section id="attendance-history">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="decoration"></span>Attendance History
+                        </h2>
+                        <div class="actions">
+                            <button class="icon-button active">
+                                <img
+                                    src="/assets/icons/layout_1.svg"
+                                    alt="Layout 1"
+                                    width="18px"
+                                    height="18px"
+                                />
+                            </button>
+                            <button class="icon-button">
+                                <img
+                                    src="/assets/icons/layout_2.svg"
+                                    alt="Layout 2 Icon"
+                                    width="18px"
+                                    height="18px"
+                                />
+                            </button>
+                            <button class="outline-button">
+                                <img
+                                    src="/assets/icons/sort.svg"
+                                    alt="Sort Icon"
+                                    width="20px"
+                                    height="20px"
+                                />
+                                Sort
+                            </button>
+                            <button class="outline-button">
+                                <img
+                                    src="/assets/icons/filter.svg"
+                                    alt="Filter Icon"
+                                    width="20px"
+                                    height="20px"
+                                />
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                    <ul class="attendance-history-list">
+                        <li class="attendance-history-list-item">
+                            <div class="header-part">
+                                <div class="attendance-date">
+                                    <img
+                                        src="/assets/icons/clock.svg"
+                                        alt="Clock Icon"
+                                    />
+                                    <p>March 08 2023</p>
+                                </div>
+                                <p class="attendance-status on-time">On Time</p>
+                            </div>
+                            <div class="content-part">
+                                <div class="check-in-group">
+                                    <p class="label">Check In Time</p>
+                                    <p class="content">08:53</p>
+                                </div>
+                                <div class="check-out-group">
+                                    <p class="label">Check Out Time</p>
+                                    <p class="content">17:15</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="attendance-history-list-item">
+                            <div class="header-part">
+                                <div class="attendance-date">
+                                    <img
+                                        src="/assets/icons/clock.svg"
+                                        alt="Clock Icon"
+                                    />
+                                    <p>March 07 2023</p>
+                                </div>
+                                <p class="attendance-status late">Late</p>
+                            </div>
+                            <div class="content-part">
+                                <div class="check-in-group">
+                                    <p class="label">Check In Time</p>
+                                    <p class="content">08:27</p>
+                                </div>
+                                <div class="check-out-group">
+                                    <p class="label">Check Out Time</p>
+                                    <p class="content">17:09</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="attendance-history-list-item">
+                            <div class="header-part">
+                                <div class="attendance-date">
+                                    <img
+                                        src="/assets/icons/clock.svg"
+                                        alt="Clock Icon"
+                                    />
+                                    <p>March 06 2023</p>
+                                </div>
+                                <p class="attendance-status absent">Absent</p>
+                            </div>
+                            <div class="content-part">
+                                <div class="check-in-group">
+                                    <p class="label">Check In Time</p>
+                                    <p class="content">-</p>
+                                </div>
+                                <div class="check-out-group">
+                                    <p class="label">Check Out Time</p>
+                                    <p class="content">-</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="attendance-history-list-item">
+                            <div class="header-part">
+                                <div class="attendance-date">
+                                    <img
+                                        src="/assets/icons/clock.svg"
+                                        alt="Clock Icon"
+                                    />
+                                    <p>March 05 2023</p>
+                                </div>
+                                <p class="attendance-status on-time">On Time</p>
+                            </div>
+                            <div class="content-part">
+                                <div class="check-in-group">
+                                    <p class="label">Check In Time</p>
+                                    <p class="content">08:55</p>
+                                </div>
+                                <div class="check-out-group">
+                                    <p class="label">Check Out Time</p>
+                                    <p class="content">17:10</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="attendance-history-list-item">
+                            <div class="header-part">
+                                <div class="attendance-date">
+                                    <img
+                                        src="/assets/icons/clock.svg"
+                                        alt="Clock Icon"
+                                    />
+                                    <p>March 04 2023</p>
+                                </div>
+                                <p class="attendance-status on-time">On Time</p>
+                            </div>
+                            <div class="content-part">
+                                <div class="check-in-group">
+                                    <p class="label">Check In Time</p>
+                                    <p class="content">08:58</p>
+                                </div>
+                                <div class="check-out-group">
+                                    <p class="label">Check Out Time</p>
+                                    <p class="content">17:06</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="attendance-history-list-item">
+                            <div class="header-part">
+                                <div class="attendance-date">
+                                    <img
+                                        src="/assets/icons/clock.svg"
+                                        alt="Clock Icon"
+                                    />
+                                    <p>March 03 2023</p>
+                                </div>
+                                <p class="attendance-status late">Late</p>
+                            </div>
+                            <div class="content-part">
+                                <div class="check-in-group">
+                                    <p class="label">Check In Time</p>
+                                    <p class="content">08:40</p>
+                                </div>
+                                <div class="check-out-group">
+                                    <p class="label">Check Out Time</p>
+                                    <p class="content">17:02</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <nav class="pagination">
+                        <a href="#" class="pagination-link active">1</a>
+                        <a href="#" class="pagination-link">2</a>
+                        <a href="#" class="pagination-link">3</a>
+                        <a href="#" class="pagination-link">4</a>
+                        <a href="#" class="pagination-link">...</a>
+                        <a href="#" class="pagination-link">8</a>
+                        <a href="#" class="pagination-link">9</a>
+                        <a href="#" class="pagination-link">10</a>
+                    </nav>
+                </section>
+            </aside>
+        </main>
+        <footer>
+            &copy; 2024. Created by Eko Susilo, inspired by&nbsp;
+            <a
+                href="https://dribbble.com/shots/20937137-Findez-Attendance-Monitoring-Dashboard"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Raafi Gian Design</a
+            >
+        </footer>
+    </body>
+</html>
